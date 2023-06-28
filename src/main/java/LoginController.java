@@ -1,20 +1,50 @@
-import javafx.application.Application;
+import Model.UserModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
     public Button btnLogIn;
     public TextField txtUserName;
     public Button btnSignUp;
+    public ComboBox cmbUserName;
+    private String userId;
 
-//     --module-path "C:\Program Files\javafx-sdk-19.0.2.1\lib" --add-modules javafx.controls,javafx.fxml
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        CmbLoaUserName();
+    }
+
+    private void CmbLoaUserName() {
+        try {
+            ObservableList<String> obList = FXCollections.observableArrayList();
+            List<String> codes = UserModel.getUserName();
+
+            for (String code : codes) {
+                obList.add(code);
+            }
+            cmbUserName.setItems(obList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "SQL Error!").show();
+        }
+    }
+
 
     public void btnLoginOnAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("View/ClientForm.fxml"));
@@ -22,7 +52,7 @@ public class LoginController {
         Scene scene = new Scene(anchorPane);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("chat");
+        stage.setTitle("Chat Space");
         stage.show();
     }
 
