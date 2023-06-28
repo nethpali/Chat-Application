@@ -1,5 +1,4 @@
-import Model.User;
-import com.jfoenix.controls.JFXTextField;
+import Model.UserModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -41,7 +39,7 @@ public class SignUpFormController implements Initializable {
 
     public void generateUserId(){
         try {
-            String nextId = User.generateNextUserId();
+            String nextId = UserModel.generateNextUserId();
             lblUserId.setText(nextId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -63,10 +61,18 @@ public class SignUpFormController implements Initializable {
 
             int affectedRows = pstm.executeUpdate();
             if(affectedRows > 0) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Customer Added!!").show();
+                new Alert(Alert.AlertType.CONFIRMATION, "User Added!!").show();
             }
+            clearAll();
         }
     }
+
+    private void clearAll() {
+        lblUserId.setText(" ");
+        txtUserName.setText(" ");
+        txtUserPassword.setText(" ");
+    }
+
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         Parent anchorPane = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
