@@ -1,64 +1,41 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client extends  Thread{
-    private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
-    private String userName;
-    private Server server;
+    private ArrayList<Client> clientsArrayList;
+    Socket socket;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
-    public Client(Socket socket, Server server) {
-        try {
-            this.socket = socket;
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.setUserName(bufferedReader.readLine());
-            this.server = server;
-            this.server.broadcastMessage(this, userName+"/#sendingClientName#/"+"hello i'm join your to chat ..!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Client(Socket socket, ArrayList<Client> clientsArrayList) throws IOException {
+        this.socket = socket;
+        this.clientsArrayList = clientsArrayList;
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.writer = new PrintWriter(socket.getOutputStream(), true);
     }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    @Override
     public void run() {
-        while (true) {
-            try {
-                String message = bufferedReader.readLine();
-                if (message != null) {
-                    server.broadcastMessage(this, message);
+        try {
+            String msg;
+            while ((msg = reader.readLine()) != null) {
+                if (msg.equalsIgnoreCase( "exit")) {
+                    break;
                 }
-            } catch (IOException e) {
-                server.broadcastMessage(this, userName+"/#sendingClientName#/"+"i'm left the chat ..!");
-                server.removeClient(this);
-                break;
+                for (Client cl : clientsArrayList) {
+                    cl.writer.println(msg);
+                }
             }
+        } catch (Exception e) {
+            // e.printStackTrace();
         }
-        try {
-            bufferedReader.close();
-            bufferedWriter.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendMessage(String message) {
-        try {
-            bufferedWriter.write(message);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        finally {
+            try {
+                reader.close();
+                writer.close();
+                socket.close();
+            } catch (IOException e) {
+                // e.printStackTrace();
+            }
         }
     }
 }
