@@ -15,11 +15,16 @@
       <Image url="@../img/icons8-male-user-64.png" />
    </ImageView>
    <TextField fx:id="txtFieldMessage" layoutX="33.0" layoutY="605.0" prefHeight="66.0" prefWidth="374.0" style="-fx-background-radius: 20px;" />
-   <ImageView fitHeight="44.0" fitWidth="53.0" layoutX="339.0" layoutY="613.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fx:id="imgsend" fitHeight="34.0" fitWidth="37.0" layoutX="360.0" layoutY="619.0" onMouseClicked="#btnImageSendOnAction" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../img/icons8-camera-64.png" />
       </image>
    </ImageView>
    <Button fx:id="btnSend" layoutX="415.0" layoutY="613.0" mnemonicParsing="false" onAction="#btnSendOnAction" prefHeight="44.0" prefWidth="106.0" style="-fx-background-radius: 20px; -fx-background-color: #079992;" text="Send" />
    <VBox fx:id="VboxSendMessage" layoutX="37.0" layoutY="99.0" prefHeight="476.0" prefWidth="469.0" style="-fx-background-color: White; -fx-background-radius: 20px;" />
+   <ImageView fx:id="emojiLoad" fitHeight="46.0" fitWidth="44.0" layoutX="312.0" layoutY="615.0" onMouseClicked="#EmojiLoadOnAction" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../img/emoji-icon-png-20.jpg" />
+      </image>
+   </ImageView>
 </AnchorPane>
